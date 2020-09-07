@@ -1,0 +1,195 @@
+// Verilog
+module Blast(query,clk,data_in,rst,signal,write_addr,index,done);
+input clk;
+input rst;
+output done;
+output [9:0]index;
+input [9:0]write_addr;
+input [19:0]query;
+input signal;
+input [99:0]data_in;  
+wire next;
+wire [99:0]subject;
+wire [9:0]addr;
+wire [9:0]index_temp;
+
+address_generator a1(clk,addr,rst,next);
+memory_module m1(addr,clk,subject,rst,signal,data_in,write_addr,index_temp);
+check_result d1(query,subject,done,rst,clk,next,index_temp,index);
+
+endmodule
+
+
+
+
+module address_generator(clk,addr,rst,next);
+input clk;
+input next;
+input rst;
+output reg  [9:0]addr;
+  always @(posedge clk or posedge next)
+begin
+  
+    if(rst)
+    begin
+    addr=10'd0;  
+    end
+  
+    else
+    begin
+
+    if(next)
+    addr=addr+1'd1;
+    else
+    addr=addr;
+
+    end
+
+end  
+endmodule
+
+
+
+  module memory_module(address,clk,out_data,rst,signal,data_in,write_addr,index_temp);
+  input [9:0]address;
+  input clk;
+    input [99:0]data_in;
+  input [9:0]write_addr;
+  output reg [99:0]out_data;
+  input signal;
+  input rst;
+  integer i,j;
+  reg [0:99]mem[0:1023];
+  output reg [9:0]index_temp;
+  initial
+    begin
+      for(i=0;i<1024;i=i+1)
+        begin
+          mem[i][0:4]=$urandom_range(0,20);
+          mem[i][5:9]=$urandom_range(0,20);
+          mem[i][10:14]=$urandom_range(0,20);
+          mem[i][15:19]=$urandom_range(0,20);
+          mem[i][20:24]=$urandom_range(0,20);
+          mem[i][25:29]=$urandom_range(0,20);
+          mem[i][30:34]=$urandom_range(0,20);
+          mem[i][35:39]=$urandom_range(0,20);
+          mem[i][40:44]=$urandom_range(0,20);
+          mem[i][45:49]=$urandom_range(0,20);
+          mem[i][50:54]=$urandom_range(0,20);
+          mem[i][55:59]=$urandom_range(0,20);
+          mem[i][60:64]=$urandom_range(0,20);
+          mem[i][65:69]=$urandom_range(0,20);
+          mem[i][70:74]=$urandom_range(0,20);
+          mem[i][75:79]=$urandom_range(0,20);
+          mem[i][80:84]=$urandom_range(0,20);
+          mem[i][85:89]=$urandom_range(0,20);
+          mem[i][90:94]=$urandom_range(0,20);
+          mem[i][95:99]=$urandom_range(0,20);
+        end
+    end
+  
+  always @(posedge clk)
+    begin
+      if(rst)
+        begin
+          out_data=100'b0;
+        end
+      else
+        begin
+          if(signal)
+          begin
+          out_data=mem[address];
+          index_temp=address;
+          end
+          else
+            mem[write_addr]=data_in;
+        end 
+    end
+endmodule
+
+
+module check_result(query,subject,done,rst,clk,next,index_temp,index);
+input clk;
+input rst;
+input [9:0]index_temp;
+input [19:0]query;
+input [99:0]subject;
+output reg done;
+output reg next;
+output reg [9:0]index;
+  
+reg [2:0]state;
+  
+parameter s0=3'b000,s1=3'b001,s2=3'b010,s3=3'b011,s4=3'b100,s5=3'b101,s6=3'b110;
+  
+always @(posedge clk)
+begin
+  
+  if(rst)
+    begin
+      state=3'b000;
+      done=1'b0;
+      next=1'b0;
+    end
+
+else
+  begin
+case(state)
+
+s0:begin
+  next=1'b0;
+  if(query==subject[99:80])
+    state=s5;
+  else
+    state=s1;
+   end
+  
+s1:begin
+  if(query==subject[79:60])
+    state=s5;
+  else
+    state=s2;
+   end
+  
+s2:begin
+  if(query==subject[59:40])
+    state=s5;
+  else
+    state=s3;
+   end 
+  
+s3:begin
+  if(query==subject[39:20])
+     state=s5;
+  else
+    state=s4;
+   end
+                    
+s4:begin      
+  if(query==subject[19:0])
+    state=s5;
+  else
+    state=s6;
+   end
+                    
+s5:begin      
+      done=1'b1;
+      index=index_temp;
+   end
+
+s6:begin
+  state=s0;
+  next=1'b1;
+   end
+                    
+                    
+endcase
+end
+                    
+end
+                    
+endmodule
+
+
+
+
