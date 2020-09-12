@@ -1,17 +1,17 @@
-// Verilog
+
 module Blast(query,clk,data_in,rst,signal,write_addr,index,done);
 input clk;
 input rst;
 output done;
-output [9:0]index;
-input [9:0]write_addr;
+  output [10:0]index;
+  input [10:0]write_addr;
 input [19:0]query;
 input signal;
 input [99:0]data_in;  
 wire next;
 wire [99:0]subject;
-wire [9:0]addr;
-wire [9:0]index_temp;
+  wire [10:0]addr;
+  wire [10:0]index_temp;
 
 address_generator a1(clk,addr,rst,next);
 memory_module m1(addr,clk,subject,rst,signal,data_in,write_addr,index_temp);
@@ -26,13 +26,13 @@ module address_generator(clk,addr,rst,next);
 input clk;
 input next;
 input rst;
-output reg  [9:0]addr;
+  output reg  [10:0]addr;
   always @(posedge clk or posedge next)
 begin
   
     if(rst)
     begin
-    addr=10'd0;  
+    addr=11'd0;  
     end
   
     else
@@ -51,16 +51,16 @@ endmodule
 
 
   module memory_module(address,clk,out_data,rst,signal,data_in,write_addr,index_temp);
-  input [9:0]address;
+    input [10:0]address;
   input clk;
     input [99:0]data_in;
-  input [9:0]write_addr;
+    input [10:0]write_addr;
   output reg [99:0]out_data;
   input signal;
   input rst;
   integer i,j;
   reg [0:99]mem[0:1023];
-  output reg [9:0]index_temp;
+    output reg [10:0]index_temp;
   initial
     begin
       for(i=0;i<1024;i=i+1)
@@ -111,12 +111,12 @@ endmodule
 module check_result(query,subject,done,rst,clk,next,index_temp,index);
 input clk;
 input rst;
-input [9:0]index_temp;
+  input [10:0]index_temp;
 input [19:0]query;
 input [99:0]subject;
 output reg done;
 output reg next;
-output reg [9:0]index;
+  output reg [10:0]index;
   
 reg [2:0]state;
   
@@ -178,9 +178,19 @@ s5:begin
    end
 
 s6:begin
+  if(index_temp==11'h3fe)
+    begin
+    index=11'd1024;
+    next=1'b0;
+    state=s0;
+    done=1'b1;
+    end
+  else
+    begin
   state=s0;
   next=1'b1;
-   end
+    end
+end
                     
                     
 endcase
@@ -189,7 +199,6 @@ end
 end
                     
 endmodule
-
 
 
 
