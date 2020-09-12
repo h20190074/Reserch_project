@@ -4,10 +4,10 @@ module tb;
 reg clk;
 reg [19:0]query;
 reg [99:0]data_in;
-reg [9:0]write_addr;
+  reg [10:0]write_addr;
 reg rst;
 wire done;
-wire [9:0]index;
+  wire [10:0]index;
 reg signal;
 
 Blast b1(query,clk,data_in,rst,signal,write_addr,index,done);  
@@ -23,7 +23,7 @@ initial
 begin
  clk=1'b0;
  query=20'd2345;
- write_addr=9'd100;
+ write_addr=11'd100;
  data_in[99:80]=20'd2345;
  data_in[79:0]=80'b0;
  signal=1'b0;
@@ -37,10 +37,10 @@ end
 initial
   begin
     $monitor("%d",done); 
-  #2000;  $finish;
+  #8000;  $finish;
   end
   
-always #1 clk=~clk;
+always #0.5 clk=~clk;
  
 endmodule  
 
