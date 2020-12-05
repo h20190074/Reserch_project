@@ -1,0 +1,201 @@
+
+module extension (clk,data_check,sub,flag,match_score,in_number,query);
+input clk;
+input [63:0]data_check;
+input [63:0]sub;
+input [2:0]flag;
+input [7:0]query;
+output reg [4:0]match_score;
+input [2:0]in_number;
+reg [7:0]query1,query2,query3,query4,query5,query6,query7,query8;
+reg [7:0]ext1,ext2,ext3,ext4,ext5,ext6,ext7,ext8;
+
+
+always @(*)
+begin
+     query1=(data_check&64'hFF00000000000000)>>56;
+     query2=(data_check&64'h00FF000000000000)>>48;
+     query3=(data_check&64'h0000ff0000000000)>>40;
+     query4=(data_check&64'h000000ff00000000)>>32;
+     query5=(data_check&64'h00000000ff000000)>>24;
+     query6=(data_check&64'h0000000000ff0000)>>16;
+     query7=(data_check&64'h000000000000ff00)>>8;
+     query8=(data_check&64'h00000000000000ff);
+     
+end
+
+initial     
+     match_score=5'd0;
+     
+
+
+always @(posedge clk)
+begin
+     ext1=(sub&64'hFF00000000000000)>>56;
+     ext2=(sub&64'h00FF000000000000)>>48;
+     ext3=(sub&64'h0000ff0000000000)>>40;
+     ext4=(sub&64'h000000ff00000000)>>32;
+     ext5=(sub&64'h00000000ff000000)>>24;
+     ext6=(sub&64'h0000000000ff0000)>>16;
+     ext7=(sub&64'h000000000000ff00)>>8;
+     ext8=(sub&64'h00000000000000ff);
+end
+
+always @(negedge clk)
+begin
+
+case(in_number)
+
+3'b000:
+       begin
+       if(query1==ext1 && query2==ext2)
+       match_score=5'd04;
+       if(query1==ext1 && query2==ext2 && query3==ext3)
+       match_score=5'd08;
+       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4)
+       match_score=5'd12; 
+       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5)
+       match_score=5'd16;
+       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6)
+       match_score=5'd20;
+        if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7)
+        match_score=5'd24;
+        if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7 && query8==ext8)
+        match_score=5'd28;
+       end
+
+3'b001:
+       begin
+       if(query1==ext1 && query2==ext2)
+       match_score=5'd04;
+       if(query1==ext1 && query2==ext2 && query3==ext3)
+       match_score=5'd08;
+       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4)
+       match_score=5'd12; 
+       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5)
+       match_score=5'd16;
+       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6)
+       match_score=5'd20;
+       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7)
+       match_score=5'd24;
+       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7 && query8==ext8)
+       match_score=5'd28;
+       end
+
+ 3'b010:
+              begin
+              if(query2==ext2 && query3==ext3)
+              match_score=5'd04;
+              if(query1==ext1 && query2==ext2 && query3==ext3)
+              match_score=5'd08;
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4)
+              match_score=5'd12; 
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5)
+              match_score=5'd16;
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6)
+              match_score=5'd20;
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7)
+              match_score=5'd24;
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7 && query8==ext8)
+              match_score=5'd28;
+              end  
+ 
+3'b011:
+              begin
+              if(query3==ext3 && query4==ext4)
+              match_score=5'd04;
+              if(query2==ext2 && query3==ext3 && query4==ext4)
+              match_score=5'd08;
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4)
+              match_score=5'd12; 
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5)
+              match_score=5'd16;
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6)
+              match_score=5'd20;
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7)
+              match_score=5'd24;
+              if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5==query6==ext6 && query7==ext7 && query8==ext8)
+              match_score=5'd28;
+              end          
+                  
+3'b100:
+                            begin
+                            if(query4==ext4 && query5==ext5)
+                            match_score=5'd04;
+                            if(query3==ext3 && query4==ext4 && query5==ext5)
+                            match_score=5'd08;
+                            if(query2==ext2 && query3==ext3 && query4==ext4 && query5 ==ext5)
+                            match_score=5'd12; 
+                            if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5)
+                            match_score=5'd16;
+                            if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6)
+                            match_score=5'd20;
+                            if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7)
+                            match_score=5'd24;
+                            if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7 && query8==ext8)
+                            match_score=5'd28;
+                            end     
+                            
+                            
+3'b101:
+                                                        begin
+                                                        if(query5==ext5 && query6==ext6)
+                                                        match_score=5'd04;
+                                                        if(query7==ext7 && query5==ext5 && query6==ext6)
+                                                        match_score=5'd08;
+                                                        if(query7==ext7 && query4==ext4  && query5==ext5 && query6 ==ext6)
+                                                        match_score=5'd12; 
+                                                        if(query7==ext7 && query3==ext3 && query4==ext4 && query5 ==ext5 && query6 ==ext6)
+                                                        match_score=5'd16;
+                                                        if(query7==ext7 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6)
+                                                        match_score=5'd20;
+                                                        if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7)
+                                                        match_score=5'd24;
+                                                        if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6 == ext6 && query7==ext7 && query8==ext8)
+                                                        match_score=5'd28;
+                                                        end             
+                                                        
+                                                        
+3'b110:
+
+                                                        begin
+                                                        if(query6==ext6 && query7==ext7)
+                                                        match_score=5'd04;
+                                                        if(query5==ext5 && query6==ext6 && query7==ext7)
+                                                        match_score=5'd08;
+                                                        if(query4==ext4 && query5==ext5  && query6==ext6 && query7 ==ext7)
+                                                        match_score=5'd12; 
+                                                        if(query7==ext7 && query3==ext3 && query4==ext4 && query5 ==ext5 && query6 ==ext6)
+                                                        match_score=5'd16;
+                                                        if(query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5&&query6==ext6 && query7==ext7)
+                                                        match_score=5'd20;
+                                                       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5&&query6==ext6 && query7==ext7)
+                                                       match_score=5'd24;
+                                                       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5&&query6==ext6 && query7==ext7&&query8==ext8)
+                                                       match_score=5'd28;
+                                                       end                                                                                                            
+                 
+3'b111:
+       
+       begin
+       if(query7==ext7&&query8==ext8)
+       match_score=5'd4;
+        if(query6==ext6 && query7==ext7&&query8==ext8)
+        match_score=5'd08;
+       if(query5 ==ext5&&query6==ext6 && query7==ext7&&query8==ext8)
+       match_score=5'd12;
+       if(query4 ==ext4 && query5 ==ext5&&query6==ext6 && query7==ext7&&query8==ext8)
+       match_score=5'd16;
+       if( query3==ext3 && query4 ==ext4 && query5 ==ext5 && query6==ext6 && query7==ext7&&query8==ext8)
+       match_score=5'd20;
+       if(query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5&&query6==ext6 && query7==ext7&&query8==ext8)
+       match_score=5'd24;
+       if(query1==ext1 && query2==ext2 && query3==ext3 && query4 ==ext4 && query5 ==ext5&&query6==ext6 && query7==ext7&&query8==ext8)
+       match_score=5'd28;
+      end
+       
+
+endcase
+end
+
+endmodule
