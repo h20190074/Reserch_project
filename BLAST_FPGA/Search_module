@@ -1,0 +1,137 @@
+
+module search_module(score_1,in_data,clk_in,cnt_read_write,query,sub,flag);
+output reg[4:0]score_1;
+input [63:0]in_data;
+input clk_in;
+input cnt_read_write;
+reg [63:0]mem[950:0];
+integer i,k;
+output reg [63:0]sub;
+output reg  flag;
+reg start_check;
+input [7:0]query;
+reg [7:0]temp[7:0];
+
+
+
+initial
+begin
+i=0;
+k=0;
+//query=8'ha7;
+start_check=1'b0;
+score_1=5'd0;
+end
+
+always @(posedge clk_in)
+begin
+
+if(start_check==1'b0||cnt_read_write==1'b0)
+begin
+mem[i]=in_data;
+i=i+1;
+
+if(i==3)
+begin
+start_check=1'b1;
+end
+
+if(i==999)
+begin
+i=0;
+end
+
+
+end
+
+end
+
+always @(posedge clk_in)
+begin
+
+if(start_check==1'b1)
+begin
+
+
+temp[0]=(mem[k]&64'hFF00000000000000)>>56;
+temp[1]=(mem[k]&64'h00FF000000000000)>>48;
+temp[2]=(mem[k]&64'h0000FF0000000000)>>40;
+temp[3]=(mem[k]&64'h000000FF00000000)>>32;
+temp[4]=(mem[k]&64'h00000000FF000000)>>24;
+temp[5]=(mem[k]&64'h0000000000FF0000)>>16;
+temp[6]=(mem[k]&64'h000000000000FF00)>>8;
+temp[7]=(mem[k]&64'h00000000000000FF);
+
+
+if(temp[0]==query)
+begin
+score_1=5'd1;
+flag=1;
+sub=mem[k];
+end
+
+else if(temp[1]==query)
+begin
+score_1=5'd1;
+flag=1;
+sub=mem[k];
+end
+
+
+else if(temp[2]==query)
+begin
+score_1=5'd1;
+flag=1;
+sub=mem[k];
+end
+
+else if(temp[3]==query)
+begin
+score_1=5'd1;
+flag=1;
+sub=mem[k];
+end
+
+else if(temp[4]==query)
+begin
+score_1=5'd1;
+flag=1;
+sub=mem[k];
+end
+
+else if(temp[5]==query)
+begin
+score_1=5'd1;
+flag=1;
+sub=mem[k];
+end
+
+else if(temp[6]==query)
+begin
+score_1=5'd1;
+flag=1;
+sub=mem[k];
+end
+
+else if(temp[7]==query)
+begin
+score_1=5'd1;
+flag=1;
+sub=mem[k];
+end
+
+
+
+k=k+1;
+
+end
+
+if(k==998)
+begin
+k=0;//score_1=5'd0;
+end
+
+
+end
+
+endmodule
